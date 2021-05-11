@@ -31,6 +31,11 @@ r.each do |x|
   credito << x if x[:company_payment_method] == 'Cartao Credito'
 end
 
+#somar valor total de cada meio de pagamento
+boletosum = boleto.map {|s| s[:pprice]}
+pixsum = pix.map {|s| s[:pprice]}
+creditosum = credito.map {|s| s[:pprice]}
+
 #imprimir token de cobranças de cartao de credito + data de venc
 c = credito.map do |credito|
   credito[:token] + credito[:due_date].gsub(/[-]/, '') + format('%010d', credito[:pprice]*100) + statuscode(credito[:status])
@@ -53,17 +58,23 @@ t = Time.now.strftime("%Y%m%d")
 File.open("#{t}_CARTAO_DE_CREDITO_EMISSAO.txt", "w+") do |f|
 	f.puts "H#{format('%05d', credito.count)}"
   c.each { |element| f.puts"B#{(element)}" }
+      f.puts "F#{format('%015d', creditosum.sum*100)}"
 end
 
 File.open("#{t}_PIX_EMISSAO.txt", "w+") do |f|
 	f.puts "H#{format('%05d', pix.count)}"
   p.each { |element| f.puts"B#{(element)}" }
+      f.puts "F#{format('%015d', pixsum.sum*100)}"
 end
 
 File.open("#{t}_BOLETO_EMISSAO.txt", "w+") do |f|
 	f.puts "H#{format('%05d', boleto.count)}"
   b.each { |element| f.puts"B#{(element)}" }
+    f.puts "F#{format('%015d', boletosum.sum*100)}"
 end
+
+
+
 
 
 
