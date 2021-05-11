@@ -18,17 +18,17 @@ end
 
 #imprimir token de cobranças de cartao de credito + data de venc
 c = credito.map do |credito|
-  credito[:token] + credito[:due_date].gsub(/[-]/, '')
+  credito[:token] + credito[:due_date].gsub(/[-]/, '') + format('%010d', credito[:pprice]*100)
 end
 
 #imprimir token de cobranças de pix + data de venc
 p = pix.map do |pix|
-  pix[:token] + pix[:due_date].gsub(/[-]/, '')
+  pix[:token] + pix[:due_date].gsub(/[-]/, '') + format('%010d', pix[:pprice]*100)
 end
 
 #imprimir token de cobranças de boleto + data de venc
 b = boleto.map do |boleto|
-  boleto[:token] + boleto[:due_date].gsub(/[-]/, '')
+  boleto[:token] + boleto[:due_date].gsub(/[-]/, '') + format('%010d', boleto[:pprice]*100)
 end
 
 #gerar timestamp
@@ -49,5 +49,7 @@ File.open("#{t}_BOLETO_EMISSAO.txt", "w+") do |f|
 	f.puts "H#{format('%05d', boleto.count)}"
   b.each { |element| f.puts"B#{(element)}" }
 end
+
+
 
 
