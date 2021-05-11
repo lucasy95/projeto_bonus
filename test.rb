@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 require 'faraday'
 
-uri = URI('http://localhost:3000/api/v1/charges')
+uri = URI('http://localhost:3000/api/v1/invoices.json')
 response = Faraday.get(uri)
 
 boleto = []
