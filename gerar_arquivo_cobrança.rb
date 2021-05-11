@@ -16,25 +16,25 @@ r.each do |x|
   credito << x if x[:company_payment_method] == 'Cartao Credito'
 end
 
-#imprimir token de cobranças de cartao de credito
-c = credito.map do |ptoken|
-  ptoken[:token]
+#imprimir token de cobranças de cartao de credito + data de venc
+c = credito.map do |credito|
+  credito[:token] + credito[:due_date].gsub(/[-]/, '')
 end
 
-#imprimir token de cobranças de pix
-p = pix.map do |ptoken|
-  ptoken[:token]
+#imprimir token de cobranças de pix + data de venc
+p = pix.map do |pix|
+  pix[:token] + pix[:due_date].gsub(/[-]/, '')
 end
 
-#imprimir token de cobranças de boleto
-b = boleto.map do |ptoken|
-  ptoken[:token]
+#imprimir token de cobranças de boleto + data de venc
+b = boleto.map do |boleto|
+  boleto[:token] + boleto[:due_date].gsub(/[-]/, '')
 end
 
 #gerar timestamp
 t = Time.now.strftime("%Y%m%d")
 
-# criar arquivo txt cobrança - cartao de credito
+# criar arquivo txt cobrança
 File.open("#{t}_CARTAO_DE_CREDITO_EMISSAO.txt", "w+") do |f|
 	f.puts "H#{format('%05d', credito.count)}"
   c.each { |element| f.puts"B#{(element)}" }
@@ -49,6 +49,5 @@ File.open("#{t}_BOLETO_EMISSAO.txt", "w+") do |f|
 	f.puts "H#{format('%05d', boleto.count)}"
   b.each { |element| f.puts"B#{(element)}" }
 end
-
 
 
